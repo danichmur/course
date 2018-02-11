@@ -1,0 +1,7 @@
+*/cmake-build-debug
+*/.idea
+*.a
+*.so
+rddtool/res/*
+rddtool/data/*
+
