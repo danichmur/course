@@ -70,6 +70,13 @@ int rrdtools_create(int argc, char** argv){
     return rrd_create(argc, argv);
 }
 
+int rrdtools_update(int argc, char** argv){
+    char path[FILE_PATH_LEN];
+    create_path(path, argv[PATH], get_db_path());
+    argv[PATH] = path;
+    return rrd_update(argc, argv);
+}
+
 int rrdtools_remove(const char *db_name){
     char path[FILE_PATH_LEN];
     create_path(path, db_name, get_db_path());

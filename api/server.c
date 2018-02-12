@@ -1,6 +1,7 @@
 #include "server.h"
 
 int fork_pid;
+const char* (*func)(const char *);
 
 int work_with_client(int sock){
     char com_buff[BUFSIZ];
@@ -16,8 +17,10 @@ int work_with_client(int sock){
         write(sock, empty_command, strlen(empty_command));
         return 0;
     }
-    com_buff[com_len] = '\0';
-    write(sock, com_buff, com_len);
+   // com_buff[com_len] = '\0';
+    const char* answer = func(com_buff);
+    size_t len = strlen(answer);
+    write(sock, answer, len);
     free(buffer);
     return 0;
 }
@@ -50,7 +53,8 @@ void process_for_client(int listen_socket){
     }
 }
 
-int start_server(){
+int start_server(const char* (*f)(const char *)){
+    func = f;
     struct sockaddr_in addr;
     int listen_socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -64,16 +68,18 @@ int start_server(){
 
     if(-1 == bind(listen_socket, (struct sockaddr*)&addr, sizeof(addr))){
         perror("bind");
+        return -1;
     }
 
     if(-1 == listen(listen_socket, 100)) {
         perror("listen");
+        return -1;
     }
     process_for_client(listen_socket);
 //    fork_pid = fork();
 //    if(-1 == fork_pid) {
-//        return - 1;
 //        perror("fork");
+//        return -1;
 //    } else if(0 == fork_pid) {
 //        close(listen_socket);
 //        process_for_client(listen_socket);

@@ -6,7 +6,7 @@
 #define FILE_PATH_LEN 4096
 
 dictionary  *ini;
-const char *conf_file_name = "/home/parallels/rrdtool/rddtool/conf.ini";
+const char *conf_file_name = "/home/parallels/course/rddtool/conf.ini";
 
 int save_ini(){
     FILE *conf;
@@ -85,6 +85,7 @@ int set_path(const char * new_db_path, const char * name){
     }
     make_directory(path);
     iniparser_set(ini, name, path);
+    save_ini();
     return 0;
 }
 

@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-int start_server();
+int start_server(const char* (*f)(const char *));
 int kill_server();
 
 #ifdef __cplusplus

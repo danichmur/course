@@ -20,6 +20,7 @@ extern "C" {
 #endif
 
 int rrdtools_create(int argc, char** argv);
+int rrdtools_update(int argc, char** argv);
 int rrdtools_remove(const char*);
 void rrdtools_info(const char*, char*);
 int rrdtools_tune(int argc, char** argv);
