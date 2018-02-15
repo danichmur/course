@@ -1,0 +1,15 @@
+current directory: /home/parallels/course/rrd_web/vendor/bundle/ruby/2.4.0/gems/bindex-0.5.0/ext/bindex
+/home/parallels/.rvm/rubies/ruby-2.4.2/bin/ruby -r ./siteconf20180215-6503-1u1o7lt.rb extconf.rb
+creating Makefile
+
+current directory: /home/parallels/course/rrd_web/vendor/bundle/ruby/2.4.0/gems/bindex-0.5.0/ext/bindex
+make "DESTDIR=" clean
+
+current directory: /home/parallels/course/rrd_web/vendor/bundle/ruby/2.4.0/gems/bindex-0.5.0/ext/bindex
+make "DESTDIR="
+compiling cruby.c
+linking shared-object bindex/cruby.so
+
+current directory: /home/parallels/course/rrd_web/vendor/bundle/ruby/2.4.0/gems/bindex-0.5.0/ext/bindex
+make "DESTDIR=" install
+/usr/bin/install -m 0755 cruby.so ./.gem.20180215-6503-r8j0qb/bindex
