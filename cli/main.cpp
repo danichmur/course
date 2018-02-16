@@ -9,9 +9,10 @@ int main()
     start_client();
     while (true)
     {
-        char answer[BUFSIZ];
+        char answer[1000];
         string input;
         cout << ">>";
+
 
         getline(cin, input);
         if(input == "exit"){
@@ -21,3 +22,4 @@ int main()
         cout << answer << endl;
     }
 }
+

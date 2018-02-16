@@ -20,6 +20,7 @@ int start_client(){
 void send_command(const char *command, int len, char* answer){
     write(sock, command, len);
     ssize_t answ_len = read(sock, answer, BUFSIZ);
+    printf("\nCLIENT: %s %s %d %zu\n", command, answer, len , answ_len);
     if(answ_len == 0){
         perror("can't read any data");
         return;

@@ -6,7 +6,7 @@
 #include <cstring>
 #include <functional>
 #include <map>
-#include <utility>
+#include <sstream>
 
 #define DAEMON_ERR_NUM 15
 
@@ -30,22 +30,19 @@ char const *daemon_text[DAEMON_ERR_NUM] = {
 
 std::pair<int, char**> split(std::string str, std::string delim){
     std::vector<std::string> result;
-    size_t pos = 0;
-    while (1) {
-        size_t end = str.find(delim, pos);
-        if (end == str.npos) {
-            result.push_back(str.substr(pos));
-            break;
-        } else {
-            result.push_back(str.substr(pos, end - pos));
-            pos = end + 1;
-        }
+    std::stringstream ss(str);
+    std::string buf;
+    while (ss >> buf){
+        result.emplace_back(buf);
     }
+
     unsigned long argc = result.size();
-    char **argv = (char **) malloc(argc * sizeof(char*));
+    char **argv = (char **) calloc(argc, sizeof(char*));
     for(int i = 0; i < argc; i++){
-        argv[i] = (char *) malloc(result[i].size());
-        strcpy(argv[i], result[i].c_str());
+        unsigned long len = result[i].size()+1;
+        argv[i] = (char *) calloc(len, sizeof(char));
+        argv[len] = '\0';
+        std::memcpy(argv[i], result[i].c_str(), len);
     }
     return std::make_pair(argc, argv);
 }
@@ -77,7 +74,7 @@ const char* daemon_insert(int argc, char** argv){
     if(rrdtools_update(argc - 1, argv) == -1){
         return rrd_get_error();
     }
-    return daemon_text[11];
+    return rrd_get_error();
 }
 
 const char* daemon_create(int argc, char **argv){
@@ -87,7 +84,7 @@ const char* daemon_create(int argc, char **argv){
     if(rrdtools_create(argc - 1, argv) == 0){
         return daemon_text[6];
     }
-    return daemon_text[7];
+    return rrd_get_error();
 }
 
 const char* daemon_fetch(int argc, char **argv){
@@ -95,7 +92,6 @@ const char* daemon_fetch(int argc, char **argv){
     FETCH_TYPE fetch_type;
     time_t start, end;
     unsigned long step;
-    bool in_file;
 
     int opt = 0;
     while ((opt = getopt(argc, argv, "n:c:s:e:p:f:t:")) != -1) {

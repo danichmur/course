@@ -17,9 +17,10 @@ int work_with_client(int sock){
         write(sock, empty_command, strlen(empty_command));
         return 0;
     }
-   // com_buff[com_len] = '\0';
+    com_buff[com_len] = '\0';
     const char* answer = func(com_buff);
     size_t len = strlen(answer);
+    printf("\nSERVER: %s %s %zu %zu\n", com_buff, answer, com_len, len);
     write(sock, answer, len);
     free(buffer);
     return 0;
@@ -76,14 +77,6 @@ int start_server(const char* (*f)(const char *)){
         return -1;
     }
     process_for_client(listen_socket);
-//    fork_pid = fork();
-//    if(-1 == fork_pid) {
-//        perror("fork");
-//        return -1;
-//    } else if(0 == fork_pid) {
-//        close(listen_socket);
-//        process_for_client(listen_socket);
-//    }
 }
 
 int kill_server(){
