@@ -1,2 +1,9 @@
-<h1>ебошь сайт блять</h1>
-<p><%= @answer %></p>
+<p><%= @data_hash['title'] %>
+<% @data_hash['result'].each do |data| %>
+	time: <%= data['time'] %> 
+	speed: <%= data['values'][0]['speed'] %> 
+	<br>
+	</p>
+<%end %>
+
+<img src="<%= renderpic_path(@img) %>">

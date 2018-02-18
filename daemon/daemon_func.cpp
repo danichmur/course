@@ -143,6 +143,7 @@ const char* daemon_fetch(int argc, char **argv){
 const char* daemon_set_path(char **argv){
     if(strcmp(argv[1], "r") == 0){
         if(set_res_path(argv[2]) == 0){
+            printf("SET PATH: %s", argv[2]);
             return daemon_text[8];
         }
         return daemon_text[9];
