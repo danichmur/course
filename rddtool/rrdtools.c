@@ -125,21 +125,29 @@ void fetch_to_array(char *result, rrd_value_t *data,
 void fetch_to_json(char *result, rrd_value_t *data,
                    unsigned long size, time_t start,
                    unsigned long step, char ***ds_namv, unsigned long ds_cnt){
-    result += sprintf(result, "{\"result\": [{\n");
+    result += sprintf(result, "{\"names\": [");
+    for(int j = 0; j < ds_cnt; j++) {
+        if(j != 0) {
+            result += sprintf(result, ",");
+        }
+        result += sprintf(result, "\"%s\"", (*ds_namv)[j]);
+    }
+    result += sprintf(result, "],");
+    result += sprintf(result, "\"result\": [\n");
     for(int i = 0; i < size; i++){
         if(i != 0) {
             result += sprintf(result, ",\n");
         }
-        result += sprintf(result,"\"%li\":[",(long) (start + step*(i+1)));
+        result += sprintf(result,"{\"time\":\"%li\",\"values\":[",(long) (start + step*(i+1)));
         for(int j = 0; j < ds_cnt; j++) {
             if(j != 0) {
                 result += sprintf(result, ",");
             }
             result += sprintf(result, "{\"%s\":\"%lf\"}", (*ds_namv)[j], data[i*ds_cnt + j]);
         }
-        result += sprintf(result, "]");
+        result += sprintf(result, "]}");
     }
-    result += sprintf(result,"\n}]}");
+    result += sprintf(result,"\n]}");
 }
 
 void fetch_to_csv(char *result, rrd_value_t *data,

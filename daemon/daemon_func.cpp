@@ -41,9 +41,11 @@ std::pair<int, char**> split(std::string str, std::string delim){
     for(int i = 0; i < argc; i++){
         unsigned long len = result[i].size()+1;
         argv[i] = (char *) calloc(len, sizeof(char));
-        argv[len] = '\0';
         std::memcpy(argv[i], result[i].c_str(), len);
+       // argv[len] = '\0';
+
     }
+
     return std::make_pair(argc, argv);
 }
 
@@ -62,19 +64,18 @@ const char* daemon_remove(const char *name){
 }
 
 const char* daemon_info(const char *name){
+    printf("%s\n", name);
     char *db_info = (char *) calloc(COUNT*LEN, sizeof(char));
     rrdtools_info(name, db_info);
     return db_info;
 }
 
 const char* daemon_insert(int argc, char** argv){
-    for(int i = 1; i < argc; i++){
-        argv[i - 1] = argv[i];
-    }
-    if(rrdtools_update(argc - 1, argv) == -1){
+    argv[0] = "update";
+    if(rrdtools_update(argc, argv) == -1){
         return rrd_get_error();
     }
-    return rrd_get_error();
+    return daemon_text[11];
 }
 
 const char* daemon_create(int argc, char **argv){
@@ -98,6 +99,7 @@ const char* daemon_fetch(int argc, char **argv){
         switch(opt) {
             case 'n':
                 name = optarg;
+                printf("NAME: %s\n", argv[3]);
                 break;
             case 'c':
                 cf = optarg;
@@ -171,6 +173,12 @@ const char* parse_command(const char *command){
     auto split_result = split(command, " ");
     char** argv = split_result.second;
     int argc = split_result.first;
+
+//    for(int i = 0; i < argc; i++){
+//        printf("%d, %s\n", i, argv[i]);
+//    }
+
+
     char c = argv[0][0];
     switch(c){
         case 'n': {
@@ -206,7 +214,7 @@ const char* parse_command(const char *command){
             return daemon_get_path(argv);
         }
         case 'u':{
-            if(argc != 2){
+            if(argc != 3){
                 return daemon_text[5];
             }
             return daemon_insert(argc, argv);
@@ -227,7 +235,7 @@ const char* parse_rrdtool_command(int argc, char **argv){
         if(argc != 3){
             return daemon_text[2];
         }
-        return daemon_info(argv[3]);
+        return daemon_info(argv[2]);
     }
 
     if(strcmp(argv[1], "update") == 0){
@@ -238,7 +246,14 @@ const char* parse_rrdtool_command(int argc, char **argv){
     }
 
     if(strcmp(argv[1], "fetch") == 0){
-        if(argc <= 7){
+        if(argc <= 10){
+            return daemon_text[10];
+        }
+        return daemon_fetch(argc, argv);
+    }
+
+    if(strcmp(argv[1], "graph") == 0){
+        if(argc <= 10){
             return daemon_text[10];
         }
         return daemon_fetch(argc, argv);
@@ -251,16 +266,16 @@ void daemon_all_dbs(char *dbs) {
     for (int i = 0; i < COUNT; i++) {
         list[i] = (char *) calloc(LEN, sizeof(char));
     }
-
     get_db_list(list);
     int i = 0;
     strcpy(dbs, list[i]);
     free(list[i]);
     while (strcmp(list[++i], "") != 0) {
+        strcat(dbs,  "\n");
         strcat(dbs,  list[i]);
         free(list[i]);
     }
-    if (i == 0) {
+    if (i == 1) {
         strcpy(dbs,"Databases not found!");
     }
     free(list);

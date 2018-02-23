@@ -2,13 +2,23 @@
 <html>
   <head>
     <title>RrdWeb</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="assets/demo.css">
+    <link rel="stylesheet" href="assets/header-basic.css">
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/popper.js"></script>  
+    <script src="/assets/js/bootstrap.min.js"></script>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
+  <header class="header-basic">
+  <div class="header-limiter">
+    <h1><a href="/">RRD tools</span></a></h1>
+  </div>
+</header>
     <%= yield %>
   </body>
 </html>

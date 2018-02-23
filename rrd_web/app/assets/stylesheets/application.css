@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+@media (max-width: 1000px){
+  header{
+    /* Меняем оси шапки, делая её вертикальной. */
+    flex-direction: column;
+  
+    /* Выравнивание элементов шапки с начала (по левому краю). */
+    align-items: flex-start;
+  }
+}

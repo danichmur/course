@@ -1,9 +1,17 @@
-<p><%= @data_hash['title'] %>
-<% @data_hash['result'].each do |data| %>
-	time: <%= data['time'] %> 
-	speed: <%= data['values'][0]['speed'] %> 
-	<br>
-	</p>
+<div class="layer">
+<div class="page-header">
+  <h1>Databases</h1>
+</div>
+<a href="#" > add new </a>
+<hr class="col-xs-12">
+<div class="list-group">
+<% @all_db.each do |name| %>
+  <a href="/about_db/<%= name %>" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1"><%= name %></h5>
+    </div>
+  </a>
 <%end %>
+</div>
+</div>
 
-<img src="<%= renderpic_path(@img) %>">

@@ -25,17 +25,21 @@ int main() {
 //    else {
 //        return 0;
 //    }
-   // while (true)
-    {
-        char answer[BUFSIZ];
-        string input ="";
-        //cout << ">>";
 
-       // getline(cin, input);
-       // if(input == "exit"){
-        //    break;
-        //}
-        cout << parse_command(input.c_str()) << endl;
-    }
+//    while (true)
+//    {
+//        //r fetch -n speed.rrd -c AVERAGE -s 920804400 -e 920809200 -f file.json
+//
+//        //r create speed.rrd --start 920804400 DS:speed:COUNTER:600:U:U RRA:AVERAGE:0.5:1:24 RRA:AVERAGE:0.5:6:10
+//        char answer[BUFSIZ];
+//        string input ="";
+//        cout << ">>";
+//
+//        getline(cin, input);
+//        if(input == "exit"){
+//            break;
+//        }
+//        cout << parse_command(input.c_str()) << endl;
+//    }
     return 0;
 }
