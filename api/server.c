@@ -20,7 +20,6 @@ int work_with_client(int sock){
     com_buff[com_len] = '\0';
     const char* answer = func(com_buff);
     size_t len = strlen(answer);
-    printf("\nSERVER: %s %s %zu %zu\n", com_buff, answer, com_len, len);
     write(sock, answer, len);
     free(buffer);
     return 0;
@@ -54,7 +53,7 @@ void process_for_client(int listen_socket){
     }
 }
 
-int start_server(const char* (*f)(const char *)){
+int start_server(const char* (*f)(const char *), const char* adress, unsigned int port){
     func = f;
     struct sockaddr_in addr;
     int listen_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -64,8 +63,8 @@ int start_server(const char* (*f)(const char *)){
     }
 
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(PORT);
-    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = inet_addr(adress);
 
     if(-1 == bind(listen_socket, (struct sockaddr*)&addr, sizeof(addr))){
         perror("bind");
@@ -77,8 +76,4 @@ int start_server(const char* (*f)(const char *)){
         return -1;
     }
     process_for_client(listen_socket);
-}
-
-int kill_server(){
-    kill(fork_pid, SIGTERM);
 }

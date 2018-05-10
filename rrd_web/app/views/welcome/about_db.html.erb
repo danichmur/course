@@ -4,8 +4,8 @@
 </div>
  <div class="btn-group">
   <%= button_to("Fetch json", { action: "fetch_form_json", name: @name}, class: "btn btn-secondary", method: :get)%>
-  <%= button_to("Fetch graph", { action: "index" }, class: "btn btn-secondary")%>
-  <%= button_to("Delete", { action: "index" }, class: "btn btn-secondary", data: {confirm: "Are you sure?", confirm_proceed: "Disconnect"})%>
+  <%= button_to("Fetch graph", { action: "fetch_form_json", name: @name}, class: "btn btn-secondary", method: :get)%>
+  <%= button_to("Delete", { action: "index" }, class: "btn btn-secondary", data: {confirm: "Are you sure?", confirm_proceed: "Disconnect"}, method: :get)%>
 </div>
 
 <hr class="col-xs-12">

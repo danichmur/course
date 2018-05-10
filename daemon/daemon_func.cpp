@@ -8,7 +8,7 @@
 #include <map>
 #include <sstream>
 
-#define DAEMON_ERR_NUM 15
+#define DAEMON_ERR_NUM 17
 
 char const *daemon_text[DAEMON_ERR_NUM] = {
         "the database was successfully renamed",    // 0
@@ -25,7 +25,9 @@ char const *daemon_text[DAEMON_ERR_NUM] = {
         "the database was successfully updated",    // 11
         "the database can not be updated",          // 12
         "the database can not be fetched",          // 13
-        "the database was successfully fetched"     // 14
+        "the database was successfully fetched",    // 14
+        "the database can not be graphed",          // 15
+        "the database was successfully graphed"     // 16
 };
 
 std::pair<int, char**> split(std::string str, std::string delim){
@@ -42,7 +44,6 @@ std::pair<int, char**> split(std::string str, std::string delim){
         unsigned long len = result[i].size()+1;
         argv[i] = (char *) calloc(len, sizeof(char));
         std::memcpy(argv[i], result[i].c_str(), len);
-       // argv[len] = '\0';
 
     }
 
@@ -64,14 +65,28 @@ const char* daemon_remove(const char *name){
 }
 
 const char* daemon_info(const char *name){
-    printf("%s\n", name);
     char *db_info = (char *) calloc(COUNT*LEN, sizeof(char));
     rrdtools_info(name, db_info);
     return db_info;
 }
 
+const char* daemon_graph(int argc, char** argv){
+    for(int i = 1; i < argc; i++){
+        argv[i - 1] = argv[i];
+    }
+    char ***calcpr = static_cast<char ***>(malloc(sizeof(char)));
+    int xsize, ysize;
+    double ymin, ymax;
+    if(rrd_graph(argc - 1, argv,
+              calcpr, &xsize, &ysize, nullptr,
+              &ymin, &ymax) == 0){
+        return daemon_text[16];
+    }
+    return daemon_text[17];
+}
+
 const char* daemon_insert(int argc, char** argv){
-    argv[0] = "update";
+    argv[0] = const_cast<char *>("update");
     if(rrdtools_update(argc, argv) == -1){
         return rrd_get_error();
     }
@@ -99,7 +114,6 @@ const char* daemon_fetch(int argc, char **argv){
         switch(opt) {
             case 'n':
                 name = optarg;
-                printf("NAME: %s\n", argv[3]);
                 break;
             case 'c':
                 cf = optarg;
@@ -173,11 +187,6 @@ const char* parse_command(const char *command){
     auto split_result = split(command, " ");
     char** argv = split_result.second;
     int argc = split_result.first;
-
-//    for(int i = 0; i < argc; i++){
-//        printf("%d, %s\n", i, argv[i]);
-//    }
-
 
     char c = argv[0][0];
     switch(c){

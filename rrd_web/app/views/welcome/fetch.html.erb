@@ -1,13 +1,15 @@
 <div class="layer">
 	<div class="page-header">
-		<h1><%=@name %></h1>
+		<h1>Database: <%=@name %></h1>
 	</div>
-
+<hr class="col-xs-12">
 	<% @data_hash['result'].each do |data| %>
 		 <h5 class="mb-1">time: <%= Time.at(data['time'].to_i).strftime("%H:%M:%S") %> 
 		speed: <%= data['values'][0]['speed'] %></h5>
 	<%end %>
+	<hr class="col-xs-12">
 	<img src="<%= renderpic_path(@img) %>">
+
 </div>
 
 

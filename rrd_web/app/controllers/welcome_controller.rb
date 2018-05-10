@@ -2,15 +2,11 @@ class WelcomeController < ApplicationController
   include Client
   require 'json'
 
+  def new
+  end
+
   def index
     self.all_db
-  	#s = "r create 3test.rrd --start 920804400 DS:speed:COUNTER:600:U:U RRA:AVERAGE:0.5:1:24 RRA:AVERAGE:0.5:6:10"
-  	#@answer, p_out = send_from_web(s, s.length)
-	
-	#file = File.read(self.get_res + '1.json')
-	#@data_hash = JSON.parse(file)
-  #	@img = "rrd-example3.png"
-  	
   end
 
   def show_image
@@ -52,8 +48,7 @@ class WelcomeController < ApplicationController
   end
 
   def graph
-     s = "graph speed3.png --start 920804400--end 920808000 --vertical-label km/h DEF:myspeed=/home/parallels/rrdtool/rddtool/data/example:speed:AVERAGE CDEF:kmh=myspeed,3600,* CDEF:fast=kmh,100,GT,kmh,0,IF CDEF:good=kmh,100,GT,0,kmh,IF HRULE:100#0000FF:\"Maximum allowed\" AREA:good#00FF00:\"Good speed\" AREA:fast#FF0000:\"Too fast\""
-     graph, p_out = send_from_web(s, s.length)
+     #graph, p_out = send_from_web(s, s.length)
      @img = "speed3.png"
   end
 

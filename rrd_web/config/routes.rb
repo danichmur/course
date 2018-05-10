@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   match '/index', to: "welcome#all_db", via: "get"
   match '/fetch_form_json/:name', to: "welcome#fetch_form_json", via: "get"
   match '/fetch', to: "welcome#fetch", via: "get"
+  match '/new', to: "welcome#new", via: "get"
 end
